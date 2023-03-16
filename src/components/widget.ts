@@ -6,14 +6,21 @@ class Widget {
   options: any;
   app: any = null;
   instance: any = null;
+  defaultOptions: any;
 
   constructor({ el, options }: { el: string; options: any }) {
     this.el = el;
-    this.options = {
-      message: ref(options.message || ''),
-      theme: ref(options.theme || { color: 'black' }),
+    this.defaultOptions = {
+      message: options.message || '',
+      theme: options.theme || { color: 'black' },
       onInit: options.onInit || (() => {}),
       onDestroy: options.onDestroy || (() => {}),
+    };
+    this.options = {
+      message: ref(this.defaultOptions.message),
+      theme: ref(this.defaultOptions.theme),
+      onInit: this.defaultOptions.onInit,
+      onDestroy: this.defaultOptions.onDestroy,
     };
   }
 
@@ -38,11 +45,11 @@ class Widget {
 
   destroy() {
     if (this.app) {
-      this.options.onDestroy();
       this.app.unmount();
       this.app = null;
       this.instance = null;
     }
+    this.resetOptions();
   }
 
   updateOptions(newOptions: any) {
@@ -51,6 +58,13 @@ class Widget {
         this.options[key].value = newOptions[key];
       }
     }
+  }
+
+  resetOptions() {
+    this.options.message.value = this.defaultOptions.message;
+    this.options.theme.value = this.defaultOptions.theme;
+    this.options.onInit = this.defaultOptions.onInit;
+    this.options.onDestroy = this.defaultOptions.onDestroy;
   }
 }
 

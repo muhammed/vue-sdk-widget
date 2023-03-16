@@ -28,5 +28,8 @@ export default defineComponent({
     console.log({theme: this.theme})
     this.onInit();
   },
+  beforeUnmount() {
+    this.onDestroy();
+  },
 });
 </script>
