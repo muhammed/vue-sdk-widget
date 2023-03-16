@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <link rel="stylesheet" href="./style.css" />
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- <script src="./library-demo.js"></script> -->
+  </head>
+  <body>
+    <div>
+      <h1>Hello Vite!</h1>
+      <div class="card">
+        <button id="my-button" type="button">init widget</button>
+        <button id="my-button-destroy" type="button">destroy widget</button>
+        <input type="text" id="widget-input" placeholder="message" />
+      </div>
+      <br /><br /><br />
+      <div class="card">
+        <button id="my-button-second" type="button">init widget-second</button>
+        <button id="my-button-destroy-second" type="button">
+          destroy widget-second
+        </button>
+        <input type="text" id="widget-input-second" placeholder="message" />
+      </div>
+      <p class="read-the-docs">Click on the Vite logo to learn more</p>
+    </div>
+
+    <div id="my-widget"></div>
+    <br /><br /><br />
+    <div id="my-widget-second"></div>
+    <!-- <script type="module" src="/main.js"></script> -->
+    <script src="./dist/library-demo.umd.cjs"></script>
+
+    <script>
+      const widget = new Widget.default({
+        el: "#my-widget",
+        options: {
+          message: "Hello, world!",
+          theme: { color: "red" },
+          onInit: () => {
+            console.log("initialized");
+          },
+          onDestroy: () => {
+            console.log("destroyed");
+          },
+        },
+      });
+
+      const button = document.querySelector("#my-button");
+
+      button.addEventListener("click", () => {
+        widget.init();
+      });
+
+      const destroyButton = document.querySelector("#my-button-destroy");
+
+      destroyButton.addEventListener("click", () => {
+        widget.destroy();
+      });
+
+      const input = document.querySelector("#widget-input");
+
+      input.addEventListener("input", (e) => {
+        console.log(e.target.value)
+        widget.updateOptions({ message: e.target.value });
+      });
+
+      // SECOND WIDGET
+      const widgetSecond = new Widget.default({
+        el: "#my-widget-second",
+        options: {
+          message: "Hello, world from second widget!",
+          theme: { color: "red" },
+          onInit: () => {
+            console.log("initialized");
+          },
+          onDestroy: () => {
+            console.log("destroyed");
+          },
+        },
+      });
+      const buttonSecond = document.querySelector("#my-button-second");
+
+      buttonSecond.addEventListener("click", () => {
+        console.log("asdas");
+        widgetSecond.init();
+      });
+
+      const destroyButtonSecond = document.querySelector(
+        "#my-button-destroy-second"
+      );
+
+      destroyButtonSecond.addEventListener("click", () => {
+        widgetSecond.destroy();
+      });
+
+
+      const inputSecond = document.querySelector("#widget-input-second");
+
+      inputSecond.addEventListener("input", (e) => {
+        widgetSecond.updateOptions({ message: e.target.value });
+      });
+    </script>
+  </body>
+</html>
