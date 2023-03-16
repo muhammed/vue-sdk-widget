@@ -1,48 +1,35 @@
-import { createApp, ref } from "vue";
-import WidgetComponent from "./Widget.vue";
+import { createApp, ref } from 'vue';
+import WidgetComponent from './Widget.vue';
 
 class Widget {
   el: string;
-  initialOptions: any;
   options: any;
   app: any = null;
   instance: any = null;
 
   constructor({ el, options }: { el: string; options: any }) {
     this.el = el;
-    this.initialOptions = {
-      message: options.message || "",
-      theme: options.theme || { color: "black" },
+    this.options = {
+      message: ref(options.message || ''),
+      theme: ref(options.theme || { color: 'black' }),
       onInit: options.onInit || (() => {}),
       onDestroy: options.onDestroy || (() => {}),
     };
-    this.setOptions(this.initialOptions);
-  }
-
-  setOptions(newOptions: any) {
-    this.options = {
-      message: ref(newOptions.message),
-      theme: ref(newOptions.theme),
-      onInit: newOptions.onInit,
-      onDestroy: newOptions.onDestroy,
-    };
-  }
-
-  resetOptions() {
-    this.setOptions(this.initialOptions);
   }
 
   init() {
     const options = this.options;
     const widget = createApp({
       components: { WidgetComponent },
-      provide: {
-        message: options.message,
-        theme: options.theme,
-        onInit: options.onInit,
-        onDestroy: options.onDestroy,
+      template: `<WidgetComponent
+        v-model:message="options.message.value"
+        v-model:theme="options.theme.value"
+        :onInit="options.onInit"
+        :onDestroy="options.onDestroy"
+      />`,
+      setup() {
+        return { options };
       },
-      template: "<WidgetComponent />",
     });
 
     this.app = widget;
@@ -56,9 +43,6 @@ class Widget {
       this.app = null;
       this.instance = null;
     }
-
-    // Reset the options to their initial values
-    this.resetOptions();
   }
 
   updateOptions(newOptions: any) {

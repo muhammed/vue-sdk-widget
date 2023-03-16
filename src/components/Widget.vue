@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, PropType, computed, Ref } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   props: {
@@ -12,33 +12,21 @@ export default defineComponent({
       default: '',
     },
     theme: {
-      type: Object as PropType<{ color: string }>,
+      type: Object,
       default: () => ({ color: 'inherit' }),
     },
     onInit: {
-      type: Function as PropType<() => void>,
+      type: Function,
       default: () => {},
     },
     onDestroy: {
-      type: Function as PropType<() => void>,
+      type: Function,
       default: () => {},
     },
   },
-  setup(props) {
-    const injectedMessage = inject('message') as Ref<string> | undefined;
-    const injectedTheme = inject('theme') as Ref<{ color: string }> | undefined;
-    const onInit = inject('onInit') as (() => void) | undefined;
-    const onDestroy = inject('onDestroy') as (() => void) | undefined;
-
-    const message = computed(() => injectedMessage?.value || props.message);
-    const theme = computed(() => injectedTheme?.value || props.theme);
-
-    (onInit || props.onInit)();
-
-    return {
-      message,
-      theme,
-    };
+  mounted() {
+    console.log({theme: this.theme})
+    this.onInit();
   },
 });
 </script>
