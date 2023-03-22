@@ -15,12 +15,15 @@ class Widget {
       theme: options.theme || { color: 'black' },
       onInit: options.onInit || (() => {}),
       onDestroy: options.onDestroy || (() => {}),
+      customMessageTypes: options.customMessageTypes || {},
     };
     this.options = {
       message: ref(this.defaultOptions.message),
+      customMessageTypes: ref(this.defaultOptions.customMessageTypes),
       theme: ref(this.defaultOptions.theme),
       onInit: this.defaultOptions.onInit,
       onDestroy: this.defaultOptions.onDestroy,
+      dynamicComponent: ref(this.defaultOptions.dynamicComponent),
     };
   }
 
@@ -31,8 +34,10 @@ class Widget {
       template: `<WidgetComponent
         v-model:message="options.message.value"
         v-model:theme="options.theme.value"
+        v-model:customMessageTypes="options.customMessageTypes.value"
         :onInit="options.onInit"
         :onDestroy="options.onDestroy"
+        :dynamicComponent="options.dynamicComponent.value"
       />`,
       setup() {
         return { options };

@@ -1,8 +1,10 @@
 name: library-demo
-id: a77c7978-0cb4-4060-a45a-faaa73606ecf
-language: TypeScript
+id: de62e400-c948-426f-bc4a-e457332ea16f
 extensions:
   - .ts
   - .cts
   - .mts
   - .tsx
+languages:
+  - TypeScript
+  - TSX

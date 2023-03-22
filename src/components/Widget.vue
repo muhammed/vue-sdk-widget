@@ -1,5 +1,7 @@
 <template>
   <div :style="{ color: theme.color }">{{ message }}</div>
+  dynamic component;
+  <component :is="getMessageComponent('ComponentTypeA')" />
 </template>
 
 <script lang="ts">
@@ -23,9 +25,17 @@ export default defineComponent({
       type: Function,
       default: () => {},
     },
+    customMessageTypes: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  methods: {
+    getMessageComponent(type: string) {
+      return this.customMessageTypes[type] || null;
+    },
   },
   mounted() {
-    console.log({theme: this.theme})
     this.onInit();
   },
   beforeUnmount() {
